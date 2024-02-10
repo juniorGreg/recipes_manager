@@ -1,0 +1,10 @@
+<nav>
+    <span id="nav-title"> Gestionnaire de recettes</span>
+    <a hx-get="/add_recipe">Ajouter un recette</a>
+    <a hx-get="/recipes">Voir les recettes</a>
+</nav>
+<main>
+    {% block main %}
+        RIEN!!!!!!!!
+    {% endblock main %}
+</main>

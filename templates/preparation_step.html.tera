@@ -1,0 +1,8 @@
+<div class="preparation_step">
+    {{preparation_step}}
+    <button _="on click remove the closest .preparation_step">
+        Enlever
+    </button>
+    <input type="hidden" name="preparation_steps[{{preparation_step}}]" value="{{preparation_step}}">
+</div>
+

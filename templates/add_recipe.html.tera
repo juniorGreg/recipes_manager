@@ -1,0 +1,53 @@
+{% extends "base" %}
+{% block main %}
+    <h1>Ajouter une recette</h1>
+    {{ content }}
+    <form hx-post="/recipe" 
+          hx-target="#form-result"
+          hx-params="not ingredient_name, ingredient_quantity, ingredient_unit, preparation_step"
+    >
+        <div>
+            <label for="recipe-title">Nom de la recette</label>
+            <input type="text" name="title" id="title" required>
+        </div>
+        <fieldset hx-include="this">
+            <legend>Ingredients</legend>
+            <label for="ingredient_name">Nom:</label>
+            <input type="text" name="ingredient_name" required>
+            <label for="ingredient_quantity">Quantité</label>
+            <input type="number" min="1" name="ingredient_quantity" required>
+            <label for="ingredient_unit">Unité de mesure</label>
+            <select name="ingredient_unit">
+                <option value="gr">gr</option>
+                <option value="lbs">lbs</option>
+                <option value="ml">ml</option>
+                <option value="cup">tasse</option>
+            </select>
+            <button hx-post="/ingredient" 
+                    hx-target="#ingredients" 
+                    hx-params="ingredient_name, ingredient_quantity, ingredient_unit" 
+                    hx-swap="beforeend"
+            >
+                Ajouter un ingrédient
+            </button>
+            <div id="ingredients"></div>
+        </fieldset>
+        <fieldset hx-include="this">
+            <legend>Marche à suivre</legend>
+            <label for="preparation_step">Étape</label>
+            <input type="text" name="preparation_step"></input>
+            <button hx-post="/preparation_step"
+                    hx-target="#preparation_steps"
+                    hx-params="preparation_step"
+                    hx-swap="beforeend"
+            >
+                Ajouter une étape
+            </button>
+            <div id="preparation_steps"></div>
+        </fieldset>
+        <input type="submit" value="Ajouter">
+    </form>
+    <h2>Recettes</h2>
+    <div id="form-result"></div>
+{% endblock main %}
+

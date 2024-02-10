@@ -1,0 +1,10 @@
+<div class="ingredient">
+    Nom: {{ingredient_name}}, Quantité: {{ingredient_quantity}}, Unité: {{ingredient_unit}} 
+    <button _="on click remove the closest .ingredient">
+        Enlever
+    </button>
+    <input type="hidden" name="ingredients[{{ingredient_name}}].ingredient_name" value="{{ingredient_name}}">
+    <input type="hidden" name="ingredients[{{ingredient_name}}].ingredient_quantity" value="{{ingredient_quantity}}">
+    <input type="hidden" name="ingredients[{{ingredient_name}}].ingredient_unit" value="{{ingredient_unit}}">
+</div>
+
