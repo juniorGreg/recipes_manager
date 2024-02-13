@@ -3,17 +3,13 @@ use rocket_dyn_templates::{Template, context};
 use rocket::fs::{FileServer, relative};
 use rocket::form::Form;
 use rocket::State;
-use rocket::tokio::fs::File;
-
-use surrealdb::Surreal;
-use surrealdb::engine::remote::ws::Client;
-
-use tectonic;
 
 mod database;
 mod models;
+mod recipes_printer;
 
 use models::*;
+use database::Database;
 
 #[derive(Responder)]
 #[response(status = 200, content_type = "pdf")]
@@ -22,23 +18,21 @@ struct IncludedPdf(Vec<u8>);
 
 
 #[post("/recipe", data = "<recipe>")]
-async fn new_recipe(db: &State<Surreal<Client>>, recipe: Form<Recipe>) -> String {
+async fn new_recipe(db: &State<Database>, recipe: Form<Recipe>) -> String {
     let response = format!("Add Recipe: {}, Preps: {:?}, ingredients: {:?}", recipe.title, recipe.preparation_steps, recipe.ingredients);
-    let created: Vec<Record> = db.create("recipes").content::<Recipe>(recipe.into_inner()).await.unwrap();
-    dbg!(created);
+    db.create_recipe(&recipe.into_inner()).await;
     response
 }
 
 #[get("/recipes")]
-async fn recipes(db: &State<Surreal<Client>>) -> Template {
-    let recipes: Vec<RecipeWithId> = db.select("recipes").await.unwrap();
+async fn recipes(db: &State<Database>) -> Template {
+    let recipes: Vec<RecipeWithId> = db.get_all_recipes().await;
     Template::render("recipes", context!{recipes: recipes})
 }
 
 #[delete("/recipes/<id>")]
-async fn delete_recipe(db: &State<Surreal<Client>>, id: &str) {
-    let recipe: Option<Recipe> = db.delete(("recipes", id)).await.unwrap();
-    dbg!(recipe);
+async fn delete_recipe(db: &State<Database>, id: &str) {
+    db.delete_recipe(id).await;
 }
 
 #[get("/add_recipe")]
@@ -64,16 +58,9 @@ fn new_preparation_step(preparation_step: Form<PreparationStep>) -> Template {
 }
 
 #[get("/pdf/<id>")]
-async fn get_recipe_pdf(_db: &State<Surreal<Client>>, id: &str) -> IncludedPdf {
-    let latex = r#"
-    \documentclass{article}
-    \begin{document}
-    Hello, world!!!!
-    \end{document}
-    "#;
-    dbg!("okidoo");
-    let pdf_bytes = tectonic::latex_to_pdf(latex).unwrap();
-    dbg!("okidoo2");
+async fn get_recipe_pdf(db: &State<Database>, id: &str) -> IncludedPdf {
+    let recipe = db.get_recipe(id).await.unwrap();
+    let pdf_bytes = recipes_printer::print_pdf_recipe(&recipe).await;
     IncludedPdf(pdf_bytes)
 }
 
@@ -85,7 +72,7 @@ fn index() -> Template {
 
 #[launch]
 async fn rocket() -> _ {
-    let db = database::get_surreal_connection().await.unwrap();
+    let db = Database::new().await.unwrap();
     rocket::build()
         .mount("/", routes![index, new_recipe, recipes, add_recipe, delete_recipe, new_ingredient, new_preparation_step, get_recipe_pdf])
         .mount("/public", FileServer::from(relative!("static")))
