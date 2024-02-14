@@ -1,7 +1,6 @@
 use tectonic;
 use crate::models::*;
-
-async fn generate_latex() -> String {
+async fn header_latex() -> String {
     let latex = r#"
 \documentclass[a4paper,17pt]{extarticle}
 \usepackage[T1]{fontenc}
@@ -19,34 +18,43 @@ async fn generate_latex() -> String {
     \includegraphics[height=3cm]{template_pdf/banniere_benelux}
 \end{center}
 
-\section*{Panini Chèvre, Légumes grillés et Pesto}
+\section*{"#;
+
+    String::from(latex)
+}
+
+
+async fn generate_latex(recipe: &RecipeWithId) -> String {
+    let mut latex = header_latex().await;
+    latex.push_str(&recipe.title);
+    latex.push_str(r#"}
 \subsection*{Ingredients :}
 \begin{itemize}[parsep=1pt]
-    \item Pains Ciabatta 3 X 6
-    \item 1 kg Fromage de chèvre
-    \item 500 gr Pesto de basilic
-    \item 500 gr Poivrons rôtis 
-    \item 500 gr Courgettes rôties
-    \item 200 gr Tomates séchées
-    \item 200 gr Oignons caramélisés
-    \item 20 gr Ail hachés
-    \item Sel/Poivron (au goût)
-\end{itemize}
+"#);
+    for ingredient in &recipe.ingredients {
+        let ingredient_str = format!("\\item {} {} {}", ingredient.ingredient_quantity,
+                                                    ingredient.ingredient_unit,
+                                                    ingredient.ingredient_name);
+        latex.push_str(&ingredient_str);
+    }
+
+    latex.push_str(r#"\end{itemize}
 \subsection*{Marche à suivre :}
-\begin{enumerate}[parsep=1pt]
-    \item Caraméliser les oignons avec de l'huile d'olives ou du beurre.
-    \item Peser les ingrédients.
-    \item Couper en morceaux les poivrons et les courgettes.
-    \item Mélanger tous les ingrédients.
-    \item Répartir le mélange sur environ 25 pains.
-\end{enumerate}
-\end{document}
-    "#;
+\begin{enumerate}[parsep=1pt]"#);
+
+    for prep in &recipe.preparation_steps {
+        let prep_str = format!("\\item {}", prep);
+        latex.push_str(&prep_str);
+    }
+    latex.push_str(r#"
+\end{enumerate}"#);
+    latex.push_str(r#"
+\end{document}"#);
     String::from(latex) 
 }
 
-pub async fn print_pdf_recipe(_recipe: &RecipeWithId) -> Vec<u8> {
-    let latex = generate_latex().await;
+pub async fn print_pdf_recipe(recipe: &RecipeWithId) -> Vec<u8> {
+    let latex = generate_latex(recipe).await;
     let pdf_bytes = tectonic::latex_to_pdf(latex).unwrap();
     dbg!("okidoo2");
     pdf_bytes 

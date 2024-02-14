@@ -18,10 +18,14 @@
             <input type="number" min="1" name="ingredient_quantity" required>
             <label for="ingredient_unit">Unité de mesure</label>
             <select name="ingredient_unit">
+                <option value=" "> </option>
                 <option value="gr">gr</option>
-                <option value="lbs">lbs</option>
+                <option value="kg">kg</option>
                 <option value="ml">ml</option>
-                <option value="cup">tasse</option>
+                <option value="pot">pot</option>
+                <option value="canne">canne</option>
+                <option value="tsp">tsp</option>
+                <option value="tbsp">tbsp</option>
             </select>
             <button hx-post="/ingredient" 
                     hx-target="#ingredients" 

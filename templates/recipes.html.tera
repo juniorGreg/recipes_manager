@@ -19,7 +19,7 @@
             <button hx-delete="/recipes/{{ recipe.id.id.String }}" hx-confirm="Es-tu sûr ?" hx-target="closest article">
                 Enlever la recette
             </button>
-            <a href="/pdf/{{ recipe.id.id.String }}" download>Télécharger le pdf</a>
+            <a href="/pdf/{{ recipe.id.id.String }}" download="{{ recipe.title }}">Télécharger le pdf</a>
         </article>
         {% endfor %}
 
