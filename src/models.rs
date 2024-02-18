@@ -34,6 +34,21 @@ pub struct PreparationStep {
     pub preparation_step: String,
 }
 
+#[derive(FromForm, Serialize, Deserialize, Debug)]
+#[serde(crate = "rocket::serde")]
+pub struct Allergen {
+    pub name: String,
+    pub ingredients: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(crate = "rocket::serde")]
+pub struct AllergenWithId {
+    pub id: Thing,
+    pub name: String,
+    pub ingredients: Vec<String>,
+}
+
 #[derive(Debug, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct Record {

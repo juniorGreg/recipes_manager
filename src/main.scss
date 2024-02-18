@@ -33,16 +33,44 @@ fieldset {
   border-radius: 0.25em;
 }
 
+.form-input-container {
+  display: flex;
+  flex-wrap: nowap;
+  align-items: center;
+  input {
+    height: 1.5em;
+  }
+
+  label {
+    flex-basis: 10em;
+  }
+}
+
 button, input[type="submit"], a[download]{
   font-weight: bold;
   background-color: blue;
   color: white;
-  $padding-vertical:0.3em;
+
+  $padding-vertical:0.4em;
   padding-top: $padding-vertical;
   padding-bottom: $padding-vertical;
+
+  $padding-horizontal:0.4em;
+  padding-right: $padding-horizontal;
+  padding-left: $padding-horizontal;
+
   border:none;
   border-radius: 0.25em;
   text-decoration: none;
+  font-size: 0.75em;
+}
+
+input {
+  border-width: 1px;
+  border-style: solid;
+  border-color: darkgray;
+  border-radius: 0.25em;
+  width: 100%;
 }
 
 a, button, input[type="submit"], select {

@@ -1,0 +1,5 @@
+{% extends "base" %}
+{% block main %}
+    <h1>Listes des ingrédients</h1>
+    <h2>Les allergènes</h2>
+{% endblock main %} 

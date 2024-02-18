@@ -6,7 +6,7 @@
           hx-target="#form-result"
           hx-params="not ingredient_name, ingredient_quantity, ingredient_unit, preparation_step"
     >
-        <div>
+        <div class="form-input-container">
             <label for="recipe-title">Nom de la recette</label>
             <input type="text" name="title" id="title" required>
         </div>
@@ -16,17 +16,23 @@
             <input type="text" name="ingredient_name" required>
             <label for="ingredient_quantity">Quantité</label>
             <input type="number" min="1" name="ingredient_quantity" required>
-            <label for="ingredient_unit">Unité de mesure</label>
-            <select name="ingredient_unit">
-                <option value=" "> </option>
-                <option value="gr">gr</option>
-                <option value="kg">kg</option>
-                <option value="ml">ml</option>
-                <option value="pot">pot</option>
-                <option value="canne">canne</option>
-                <option value="tsp">tsp</option>
-                <option value="tbsp">tbsp</option>
-            </select>
+            <div class="form-input-container">
+                <label for="ingredient_unit">Unité de mesure</label>
+                <select name="ingredient_unit">
+                    <option value=" "> </option>
+                        <optgroup label="poids">
+                        <option value="gr">gr</option>
+                        <option value="kg">kg</option>
+                    </optgroup>
+                    <optgroup label="volume">
+                        <option value="ml">ml</option>
+                        <option value="pot">pot</option>
+                        <option value="canne">canne</option>
+                        <option value="tsp">tsp</option>
+                        <option value="tbsp">tbsp</option>
+                    </optgroup>
+                </select>
+            </div>
             <button hx-post="/ingredient" 
                     hx-target="#ingredients" 
                     hx-params="ingredient_name, ingredient_quantity, ingredient_unit" 
