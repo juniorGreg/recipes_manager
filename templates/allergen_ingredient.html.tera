@@ -1,0 +1,7 @@
+<div class="ingredient">
+    {{ ingredient }}
+    <button _="on click remove the closest .ingredient">
+        <i class="fa-solid fa-trash"></i>
+    </button>
+    <input type="hidden" name="ingredients[{{ingredient}}]" value="{{ingredient}}">
+ </div>

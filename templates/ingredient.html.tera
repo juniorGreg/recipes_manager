@@ -1,7 +1,13 @@
 <div class="ingredient">
     Nom: {{ingredient_name}}, Quantité: {{ingredient_quantity}}, Unité: {{ingredient_unit}} 
     <button _="on click remove the closest .ingredient">
-        Enlever
+        <i class="fa-solid fa-trash"></i>
+    </button>
+     <button _="on click log click">
+        <i class="fa-solid fa-chevron-up"></i>
+    </button>
+    <button _="on click log click">
+        <i class="fa-solid fa-chevron-down"></i>
     </button>
     <input type="hidden" name="ingredients[{{ingredient_name}}].ingredient_name" value="{{ingredient_name}}">
     <input type="hidden" name="ingredients[{{ingredient_name}}].ingredient_quantity" value="{{ingredient_quantity}}">

@@ -15,9 +15,7 @@ use database::Database;
 #[response(status = 200, content_type = "pdf")]
 struct IncludedPdf(Vec<u8>);
 
-
-
-#[post("/recipe", data = "<recipe>")]
+#[post("/recipes/new", data = "<recipe>")]
 async fn new_recipe(db: &State<Database>, recipe: Form<Recipe>) -> String {
     let response = format!("Add Recipe: {}, Preps: {:?}, ingredients: {:?}", recipe.title, recipe.preparation_steps, recipe.ingredients);
     db.recipe.create(&recipe.into_inner()).await;
@@ -35,14 +33,14 @@ async fn delete_recipe(db: &State<Database>, id: &str) {
     db.recipe.delete(id).await;
 }
 
-#[get("/add_recipe")]
+#[get("/recipes/add")]
 fn add_recipe() -> Template {
     Template::render("add_recipe", context!{
         content: "Hello",
     })
 }
 
-#[post("/ingredient", data = "<ingredient>")]
+#[post("/recipes/ingredient", data = "<ingredient>")]
 fn new_ingredient(ingredient: Form<Ingredient>) -> Template {
     //format!("Nom: {}, Quantité: {}, Unité: {}", ingredient.ingredient_name, ingredient.ingredient_quantity, ingredient.ingredient_unit)
     Template::render("ingredient", context!{
@@ -52,21 +50,36 @@ fn new_ingredient(ingredient: Form<Ingredient>) -> Template {
     })
 }
 
-#[get("/ingredients")]
-fn ingredients_list() -> Template {
-    Template::render("ingredients_list", context!{})
-}
-
-#[post("/preparation_step", data = "<preparation_step>")]
+#[post("/recipes/preparation_step", data = "<preparation_step>")]
 fn new_preparation_step(preparation_step: Form<PreparationStep>) -> Template {
     Template::render("preparation_step", context!{preparation_step: preparation_step.preparation_step.to_string()})
 }
 
-#[get("/pdf/<id>")]
+#[get("/recipes/pdf/<id>")]
 async fn get_recipe_pdf(db: &State<Database>, id: &str) -> IncludedPdf {
     let recipe = db.recipe.get(id).await.unwrap();
     let pdf_bytes = recipes_printer::print_pdf_recipe(&recipe).await;
     IncludedPdf(pdf_bytes)
+}
+
+#[get("/ingredients_list")]
+async fn ingredients_list(db: &State<Database>) -> Template {
+    let allergens = db.allergen.get_all().await;
+    Template::render("ingredients_list", context!{
+        allergens: allergens
+    })
+}
+
+#[post("/ingredients_list/allergens", data = "<allergen>")]
+async fn add_new_allergen(db: &State<Database>, allergen: Form<Allergen>) {
+    db.allergen.create(&allergen.into_inner()).await;
+}
+
+#[post("/ingredients_list/allergens/ingredient", data = "<allergen_ingredient>")]
+fn new_allergen_ingredient(allergen_ingredient: Form<AllergenIngredient>) -> Template {
+    Template::render("allergen_ingredient", context!{
+        ingredient: allergen_ingredient.ingredient.to_string(),
+    })
 }
 
 #[get("/")]
@@ -80,7 +93,8 @@ async fn rocket() -> _ {
     let db = Database::new().await.unwrap();
     rocket::build()
         .mount("/", routes![index, new_recipe, recipes, add_recipe, delete_recipe, 
-                            new_ingredient, new_preparation_step, get_recipe_pdf, ingredients_list])
+                            new_ingredient, new_preparation_step, get_recipe_pdf, 
+                            ingredients_list, add_new_allergen, new_allergen_ingredient])
         .mount("/public", FileServer::from(relative!("static")))
         .manage(db)
         .attach(Template::fairing())

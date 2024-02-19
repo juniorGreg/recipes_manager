@@ -49,6 +49,11 @@ pub struct AllergenWithId {
     pub ingredients: Vec<String>,
 }
 
+#[derive(FromForm)]
+pub struct AllergenIngredient {
+    pub ingredient: String
+}
+
 #[derive(Debug, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct Record {

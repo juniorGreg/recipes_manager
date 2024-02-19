@@ -1,8 +1,8 @@
 <nav>
     <span id="nav-title"> Gestionnaire de recettes</span>
-    <a hx-get="/add_recipe">Ajouter un recette</a>
+    <a hx-get="/recipes/add">Ajouter un recette</a>
     <a hx-get="/recipes">Voir les recettes</a>
-    <a hx-get="/ingredients">Voir la liste des ingrédients</a>
+    <a hx-get="/ingredients_list">Voir la liste des ingrédients</a>
 </nav>
 <main>
     {% block main %}

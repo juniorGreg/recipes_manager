@@ -2,7 +2,7 @@
 {% block main %}
     <h1>Ajouter une recette</h1>
     {{ content }}
-    <form hx-post="/recipe" 
+    <form hx-post="/recipes/new" 
           hx-target="#form-result"
           hx-params="not ingredient_name, ingredient_quantity, ingredient_unit, preparation_step"
     >
@@ -33,7 +33,7 @@
                     </optgroup>
                 </select>
             </div>
-            <button hx-post="/ingredient" 
+            <button hx-post="/recipes/ingredient" 
                     hx-target="#ingredients" 
                     hx-params="ingredient_name, ingredient_quantity, ingredient_unit" 
                     hx-swap="beforeend"
@@ -46,7 +46,7 @@
             <legend>Marche à suivre</legend>
             <label for="preparation_step">Étape</label>
             <input type="text" name="preparation_step"></input>
-            <button hx-post="/preparation_step"
+            <button hx-post="/recipes/preparation_step"
                     hx-target="#preparation_steps"
                     hx-params="preparation_step"
                     hx-swap="beforeend"

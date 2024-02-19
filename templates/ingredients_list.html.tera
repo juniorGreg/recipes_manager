@@ -2,4 +2,35 @@
 {% block main %}
     <h1>Listes des ingrédients</h1>
     <h2>Les allergènes</h2>
+    {% for allergen in allergens %}
+        <h3>{{ allergen.name }}</h3>
+        <ul>
+        {% for ingredient in allergen.ingredients %}
+            <li>{{ ingredient }}</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+        <h3>Ajouter un allergène</h3>
+        <form hx-post="/ingredients_list/allergens"
+              hx-params="not ingredient"
+        >
+            <label for="name">Nom: </label>
+            <input name="name" type="text">
+            <fieldset hx-include="this">
+                <legend>Ingrédients</legend>
+                <label for="ingredient">Ajouter un ingrédient</label>
+                <input type="text" name="ingredient">
+                <button hx-post="/ingredients_list/allergens/ingredient"
+                        hx-target="#ingredients"
+                        hx-params="ingredient"
+                        hx-swap="beforeend"
+                >
+                    Ajouter
+                </button>
+                <div id="ingredients"></div>
+            </fieldset>
+            <input type="submit" value="Ajouter">
+        </form>
+        <h2>Listes des ingrédients</h2>
+
 {% endblock main %} 
