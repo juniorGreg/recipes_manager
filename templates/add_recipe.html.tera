@@ -3,7 +3,6 @@
     <h1>Ajouter une recette</h1>
     {{ content }}
     <form hx-post="/recipes/new" 
-          hx-target="#form-result"
           hx-params="not ingredient_name, ingredient_quantity, ingredient_unit, preparation_step"
     >
         <div class="form-input-container">
@@ -25,9 +24,11 @@
                         <option value="kg">kg</option>
                     </optgroup>
                     <optgroup label="volume">
+                        <option value="l">l</option>
                         <option value="ml">ml</option>
-                        <option value="pot">pot</option>
-                        <option value="canne">canne</option>
+                        <option value="pot(s) (500g)">pot(s) (500g)</option>
+                        <option value="pot(s) (2,9l)">pot(s) (2,9l)</option>
+                        <option value="canne(s) (2,84l)">canne(s) (2,84l)</option>
                         <option value="tsp">tsp</option>
                         <option value="tbsp">tbsp</option>
                     </optgroup>
@@ -57,7 +58,5 @@
         </fieldset>
         <input type="submit" value="Ajouter">
     </form>
-    <h2>Recettes</h2>
-    <div id="form-result"></div>
 {% endblock main %}
 
