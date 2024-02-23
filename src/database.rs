@@ -19,7 +19,7 @@ pub struct Resource<T, I> {
 
 }
 
-impl<T: Debug + for<'de> Deserialize<'de> + Serialize, I: for<'de> Deserialize<'de>> Resource<T, I> {
+impl<T: Debug + for<'de> Deserialize<'de> + Serialize, I: Debug + for<'de> Deserialize<'de>> Resource<T, I> {
     pub async fn new(db: &Surreal<Client>, table: String) -> Self {
         Self{db: db.clone(), table, _resource: PhantomData, _resource_with_id: PhantomData}
     }
@@ -37,6 +37,12 @@ impl<T: Debug + for<'de> Deserialize<'de> + Serialize, I: for<'de> Deserialize<'
     pub async fn delete(&self, id: &str) {
         let resource: Option<T> = self.db.delete((&self.table, id)).await.unwrap();
         dbg!(resource);
+    }
+
+    pub async fn modify(&self, id: &str, resource: &T) {
+        let resource_modified: Option<I>  = self.db.update((&self.table, id)).content(resource).await.unwrap();
+        dbg!(resource_modified);
+
     }
 
     pub async fn create(&self, resource: &T) {

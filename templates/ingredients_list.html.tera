@@ -63,4 +63,5 @@
 
         </article>
         {% endfor %}
+        <a href="/ingredients_list/pdf" download="listes des ingredients">Télécharger le pdf de la liste des ingrédients</a>
 {% endblock main %} 

@@ -1,5 +1,7 @@
 use tectonic;
 use crate::models::*;
+use crate::ingredient_list_manager::IngredientList;
+
 async fn header_latex() -> String {
     let latex = r#"
 \documentclass[a4paper,17pt]{extarticle}
@@ -53,9 +55,25 @@ async fn generate_latex(recipe: &RecipeWithId) -> String {
     String::from(latex) 
 }
 
+async fn generate_latex_for_ingredient_list(ingredients_lists: &Vec<IngredientList>) -> String {
+    let mut latex = header_latex().await;
+    latex.push_str("Listes des ingrédient");
+    latex.push_str(r#"}"#);
+
+    latex.push_str(r#"
+\end{document}"#);
+    String::from(latex) 
+}
+
 pub async fn print_pdf_recipe(recipe: &RecipeWithId) -> Vec<u8> {
     let latex = generate_latex(recipe).await;
     let pdf_bytes = tectonic::latex_to_pdf(latex).unwrap();
     dbg!("okidoo2");
     pdf_bytes 
+}
+
+pub async fn print_ingredients_lists(ingredients_lists: &Vec<IngredientList>) -> Vec<u8> {
+    let latex = generate_latex_for_ingredient_list(ingredients_lists).await;
+    let pdf_bytes = tectonic::latex_to_pdf(latex).unwrap();
+    pdf_bytes
 }
