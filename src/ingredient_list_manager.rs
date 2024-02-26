@@ -12,10 +12,10 @@ pub struct IngredientList {
 
 async fn get_allergens(ingredients: &Vec<String>, allergens: &Vec<AllergenWithId>) -> Vec<String> {
     let mut allergens_list: Vec<String> = Vec::new();
-    let ingredients_set: HashSet<&String> = ingredients.into_iter().collect(); 
+    let ingredients_set: HashSet<String> = ingredients.into_iter().map(|s| s.to_lowercase()).collect(); 
     for allergen in allergens {
-        let allergens_set: HashSet<&String> = allergen.ingredients.iter().collect();
-        let intersection: Vec<&&String> = ingredients_set.intersection(&allergens_set).into_iter().collect();
+        let allergens_set: HashSet<String> = allergen.ingredients.iter().map(|s| s.to_lowercase()).collect();
+        let intersection: Vec<&String> = ingredients_set.intersection(&allergens_set).into_iter().collect();
 
         if intersection.len() > 0
         {

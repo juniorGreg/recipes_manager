@@ -97,6 +97,24 @@ fn new_allergen_ingredient(allergen_ingredient: Form<AllergenIngredient>) -> Tem
     })
 }
 
+#[put("/ingredients_list/allergens/ingredient/<id>", data = "<allergen_ingredient>")]
+async fn add_allergen_ingredient(db: &State<Database>, 
+                           allergen_ingredient: Form<AllergenIngredient>, 
+                           id: &str) -> Redirect {
+    let allergen_with_id = db.allergen.get(id).await.unwrap();
+    let mut ingredients = allergen_with_id.ingredients.to_owned();
+    ingredients.push(allergen_ingredient.ingredient.to_owned());
+    let allergen = Allergen {
+        name: allergen_with_id.name,
+        ingredients: ingredients
+    };
+
+    db.allergen.modify(id, &allergen).await;
+    
+    Redirect::to(uri!(ingredients_list))
+
+}
+
 #[get("/ingredients_list/pdf")]
 async fn get_ingredients_list_pdf(db: &State<Database>) -> IncludedPdf {
     let allergens = db.allergen.get_all().await;
@@ -119,7 +137,7 @@ async fn rocket() -> _ {
         .mount("/", routes![index, new_recipe, recipes, add_recipe, delete_recipe, 
                             new_ingredient, new_preparation_step, get_recipe_pdf, 
                             ingredients_list, add_new_allergen, new_allergen_ingredient, 
-                            get_ingredients_list_pdf, remove_allergen])
+                            get_ingredients_list_pdf, remove_allergen, add_allergen_ingredient])
         .mount("/public", FileServer::from(relative!("static")))
         .manage(db)
         .attach(Template::fairing())

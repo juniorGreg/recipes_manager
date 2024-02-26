@@ -10,6 +10,10 @@
                 <li>{{ ingredient }}</li>
             {% endfor %}
             </ul>
+            <div class="allergen_ingredient_input" hx-include="this">
+                <input type="text" name="ingredient">
+                <button hx-put="/ingredients_list/allergens/ingredient/{{allergen.id.id.String}}">Ajouter un ingrédient</button>
+            </div>
             <button 
                 hx-delete="/ingredients_list/allergens/{{allergen.id.id.String}}"
                 hx-confirm="Es-tu sûr?"
