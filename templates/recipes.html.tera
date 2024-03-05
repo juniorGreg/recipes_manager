@@ -17,12 +17,15 @@
                 {% endfor %}
             </ol>
             <button hx-delete="/recipes/{{ recipe.id.id.String }}" 
-                    hx-confirm="Es-tu sûr ?" 
+                    hx-confirm="Es-tu sûr ?"
+                    hx-target="#body"
             >
                 Enlever la recette
             </button>
             <a href="/recipes/pdf/{{ recipe.id.id.String }}" download="{{ recipe.title }}">Télécharger le pdf</a>
         </article>
-        {% endfor %}
+    {% endfor %}
+    
+    {% include "add_recipe" %}
 
 {% endblock main %}

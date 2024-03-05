@@ -8,7 +8,7 @@
         <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
         <title>Gestionnaire de recettes</title>
     </head>
-    <body id="body" hx-get="/recipes/add" hx-trigger="load delay:100ms" hx-target="#body"> 
+    <body id="body" hx-get="/recipes" hx-trigger="load delay:100ms" hx-target="#body"> 
         
     </body>
 </html>

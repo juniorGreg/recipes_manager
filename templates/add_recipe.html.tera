@@ -1,9 +1,8 @@
-{% extends "base" %}
-{% block main %}
-    <h1>Ajouter une recette</h1>
-    {{ content }}
+<article>
+    <h2>Ajouter une recette</h2>
     <form hx-post="/recipes/new" 
           hx-params="not ingredient_name, ingredient_quantity, ingredient_unit, preparation_step"
+          hx-target="#body"
     >
         <div class="form-input-container">
             <label for="recipe-title">Nom de la recette</label>
@@ -11,11 +10,13 @@
         </div>
         <fieldset hx-include="this">
             <legend>Ingredients</legend>
-            <label for="ingredient_name">Nom:</label>
-            <input type="text" name="ingredient_name" required>
-            <label for="ingredient_quantity">Quantité</label>
-            <input type="number" min="1" name="ingredient_quantity" required>
             <div class="form-input-container">
+                <label for="ingredient_name">Nom:</label>
+                <input type="text" name="ingredient_name">
+            </div>
+            <div class="form-input-container">
+                <label for="ingredient_quantity">Quantité</label>
+                <input type="number" min="1" name="ingredient_quantity">
                 <label for="ingredient_unit">Unité de mesure</label>
                 <select name="ingredient_unit">
                     <option value=" "> </option>
@@ -45,18 +46,19 @@
         </fieldset>
         <fieldset hx-include="this">
             <legend>Marche à suivre</legend>
-            <label for="preparation_step">Étape</label>
-            <input type="text" name="preparation_step"></input>
-            <button hx-post="/recipes/preparation_step"
+            <div class="form-input-button"
+                <label for="preparation_step">Étape: </label>
+                <input type="text" name="preparation_step"></input>
+                <button hx-post="/recipes/preparation_step"
                     hx-target="#preparation_steps"
                     hx-params="preparation_step"
                     hx-swap="beforeend"
-            >
-                Ajouter une étape
-            </button>
+                >
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
             <div id="preparation_steps"></div>
         </fieldset>
         <input type="submit" value="Ajouter">
     </form>
-{% endblock main %}
-
+</article>
