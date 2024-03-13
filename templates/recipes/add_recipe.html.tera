@@ -1,12 +1,13 @@
+{% import "recipes/macros" as macros %}
 <article>
-    <h2>Ajouter une recette</h2>
-    <form hx-post="/recipes/new" 
+    <h2>{{ recipe.title }}</h2>
+    <form {% if modify %} hx-put="/recipes/{{ id }}" {% else %} hx-post="/recipes/new" {% endif %}
           hx-params="not ingredient_name, ingredient_quantity, ingredient_unit, preparation_step"
           hx-target="#body"
     >
         <div class="form-input-container">
             <label for="recipe-title">Nom de la recette</label>
-            <input type="text" name="title" id="title" required>
+            <input type="text" name="title" id="title" required value="{{ recipe.title }}">
         </div>
         <fieldset hx-include="this">
             <legend>Ingredients</legend>
@@ -18,23 +19,9 @@
                 <label for="ingredient_quantity">Quantité</label>
                 <input type="number" min="1" name="ingredient_quantity">
                 <label for="ingredient_unit">Unité de mesure</label>
-                <select name="ingredient_unit">
-                    <option value=" "> </option>
-                        <optgroup label="poids">
-                        <option value="gr">gr</option>
-                        <option value="kg">kg</option>
-                    </optgroup>
-                    <optgroup label="volume">
-                        <option value="l">l</option>
-                        <option value="ml">ml</option>
-                        <option value="pot(s) (500g)">pot(s) (500g)</option>
-                        <option value="pot(s) (2,9l)">pot(s) (2,9l)</option>
-                        <option value="canne(s) (2,84l)">canne(s) (2,84l)</option>
-                        <option value="tsp">tsp</option>
-                        <option value="tbsp">tbsp</option>
-                    </optgroup>
-                </select>
-            </div>
+                {{ macros::mesure_units_select() }}
+
+           </div>
             <button hx-post="/recipes/ingredient" 
                     hx-target="#ingredients" 
                     hx-params="ingredient_name, ingredient_quantity, ingredient_unit" 
@@ -42,7 +29,11 @@
             >
                 Ajouter un ingrédient
             </button>
-            <div id="ingredients"></div>
+            <div id="ingredients">
+            {% for ingredient in recipe.ingredients %}
+                {{ macros::ingredient(ingredient=ingredient) }}
+            {% endfor  %}
+            </div>
         </fieldset>
         <fieldset hx-include="this">
             <legend>Marche à suivre</legend>
@@ -57,8 +48,17 @@
                     <i class="fa-solid fa-plus"></i>
                 </button>
             </div>
-            <div id="preparation_steps"></div>
+            <div id="preparation_steps">
+            {% for preparation_step in recipe.preparation_steps %}
+                {{ macros::preparation_step(preparation_step=preparation_step) }}
+            {% endfor  %}
+
+            </div>
         </fieldset>
-        <input type="submit" value="Ajouter">
+        {% if modify %}
+            <input type="submit" value="Modifier">
+        {% else %}
+            <input type="submit" value="Ajouter">
+        {% endif %}
     </form>
 </article>

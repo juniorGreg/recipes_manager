@@ -1,0 +1,60 @@
+{% macro mesure_units_select(name="ingredient_unit", value=" ") %}
+<select name="{{ name }}">
+    {{ self::option(selected=value) }}
+    <optgroup label="poids">
+        {{ self::option(value="gr", selected=value) }}
+        {{ self::option(value="kg", selected=value) }}
+    </optgroup>
+    <optgroup label="volume">
+        {{ self::option(value="l", selected=value) }}
+        {{ self::option(value="ml", selected=value) }}
+        {{ self::option(value="pot(s) (500g)", selected=value) }}
+        {{ self::option(value="pot(s) (2,9l)", selected=value) }}
+        {{ self::option(value="canne(s) (2,84l)", selected=value) }}
+        {{ self::option(value="tsp", selected=value) }}
+        {{ self::option(value="tbsp", selected=value) }}
+    </optgroup>
+</select>
+{% endmacro mesure_units_select %}
+
+{% macro option(value=" ", selected=" ") %}
+<option value="{{ value }}"
+    {% if value == selected %}
+        selected
+    {% endif %}
+>
+{{ value }}
+</option>
+{% endmacro %}
+
+{% macro ingredient(ingredient) %}
+{% set select_name = "ingredients[" ~ ingredient.ingredient_name ~ "].ingredient_unit" %}
+<div class="ingredient">
+
+    <label for="ingredients[{{ingredient.ingredient_name}}].ingredient_name">Nom:</label>
+    <input type="text" name="ingredients[{{ingredient.ingredient_name}}].ingredient_name" value="{{ingredient.ingredient_name}}">
+    <label for="ingredients[{{ingredient.ingredient_name}}].ingredient_quantity">Quantité:</label>
+    <input type="number" name="ingredients[{{ingredient.ingredient_name}}].ingredient_quantity" value="{{ingredient.ingredient_quantity}}">
+    <label for="ingredients[{{ingredient.ingredient_name}}].ingredient_unit">Unité:</label>
+    {{ self::mesure_units_select(name=select_name, value=ingredient.ingredient_unit) }}
+    <button _="on click remove the closest .ingredient">
+        <i class="fa-solid fa-trash"></i>
+    </button>
+     <button _="on click log click">
+        <i class="fa-solid fa-chevron-up"></i>
+    </button>
+    <button _="on click log click">
+        <i class="fa-solid fa-chevron-down"></i>
+    </button>
+</div>
+
+{% endmacro %}
+
+{% macro preparation_step(preparation_step) %}
+<div class="preparation_step">
+    <input type="text" name="preparation_steps[{{preparation_step}}]" value="{{preparation_step}}">
+    <button _="on click remove the closest .preparation_step">
+        <i class="fa-solid fa-trash"></i>
+    </button>
+</div>
+{% endmacro %}

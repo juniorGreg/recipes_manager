@@ -1,0 +1,7 @@
+<div class="preparation_step">
+    <input type="text" name="preparation_steps[{{preparation_step}}]" value="{{preparation_step}}">
+    <button _="on click remove the closest .preparation_step">
+        <i class="fa-solid fa-trash"></i>
+    </button>
+</div>
+

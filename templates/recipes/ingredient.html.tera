@@ -1,0 +1,2 @@
+{% import "recipes/macros" as macros %}
+{{ macros::ingredient(ingredient=ingredient) }}

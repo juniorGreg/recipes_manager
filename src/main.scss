@@ -50,7 +50,6 @@ fieldset {
   }
 }
 
-
 button, input[type="submit"], a[download]{
   font-weight: bold;
   background-color: blue;
@@ -86,7 +85,7 @@ button, input[type="submit"], a[download]{
   }
 }
 
-input {
+input:not([type="submit"]) {
   border-width: 1px;
   border-style: solid;
   border-color: darkgray;
@@ -141,4 +140,10 @@ nav {
   button {
     white-space: nowrap;
   }
+}
+
+.ingredient, .preparation_step {
+  display: flex;
+  gap: 0.25em;
+  align-items: center;
 }

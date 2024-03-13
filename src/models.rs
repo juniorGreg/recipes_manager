@@ -1,9 +1,9 @@
 use rocket::serde::{Serialize, Deserialize};
 
 use surrealdb::sql::Thing;
+use std::default;
 
-
-#[derive(FromForm, Serialize, Deserialize, Debug)]
+#[derive(FromForm, Serialize, Deserialize, Debug, Default)]
 #[serde(crate = "rocket::serde")]
 pub struct Recipe {
     pub title: String,
