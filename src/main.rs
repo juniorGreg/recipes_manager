@@ -10,10 +10,12 @@ mod models;
 mod ingredient_list_manager;
 mod recipes_printer;
 mod recipes_routes;
+mod temp_fridge_routes;
 
 use models::*;
 use database::Database;
 use ingredient_list_manager::*;
+
 
 #[derive(Responder)]
 #[response(status = 200, content_type = "pdf")]
@@ -91,6 +93,7 @@ async fn rocket() -> _ {
                             ingredients_list, add_new_allergen, new_allergen_ingredient, 
                             get_ingredients_list_pdf, remove_allergen, add_allergen_ingredient])
         .mount("/recipes", recipes_routes::get_routes().await)
+        .mount("/temp_fridge", temp_fridge_routes::get_routes().await)
         .mount("/public", FileServer::from(relative!("static")))
         .manage(db)
         .attach(Template::fairing())

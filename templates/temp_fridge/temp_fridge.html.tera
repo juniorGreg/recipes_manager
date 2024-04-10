@@ -1,0 +1,15 @@
+{% extends "base" %}
+
+{% block main %}
+<h1>Températures des frigos</h1>
+<h2>Fichiers de températures</h2>
+<form>
+    <div class="form-input-container">
+        <label>Frigo de la cuisine:</label>
+        <input type="file" name="kitchen_fridge_file">    
+    </div>
+
+    <input type="submit" value="Téléverser les fichiers">
+</form>
+<h2>Tableaux et diagrammes</h2>
+{% endblock %}

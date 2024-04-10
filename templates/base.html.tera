@@ -2,6 +2,7 @@
     <span id="nav-title"> Gestionnaire de recettes</span>
     <a hx-get="/recipes">Voir les recettes</a>
     <a hx-get="/ingredients_list">Voir la liste des ingrédients</a>
+    <a hx-get="/temp_fridge">Température des frigos</a>
 </nav>
 <main id="main">
     {% block main %}
